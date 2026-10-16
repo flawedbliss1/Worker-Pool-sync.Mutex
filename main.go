@@ -34,7 +34,6 @@ func worker(ch chan Evento, wg *sync.WaitGroup, c *Counter) {
 			fmt.Printf("Nome: %d %s %s \n", c.contador, eventos.Nome, eventos.Acao)
 		case <-time.After(1 * time.Second):
 			fmt.Println("timeout!")
-			return
 		}
 	}
 }
