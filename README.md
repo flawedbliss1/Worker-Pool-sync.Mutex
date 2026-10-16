@@ -9,3 +9,8 @@ channels e mutex.
 - Lança 3 workers concorrentes que leem do mesmo channel.
 - Cada worker processa o evento e incrementa um contador compartilhado.
 - Ao final, imprime o total de eventos processados.
+
+## Conteúdos estudados
+
+- Goroutine com workers e sync.Mutex para exclusividade mútua.
+- Select com aviso de timeout caso muito tempo tenha sido passado.
