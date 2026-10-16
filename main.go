@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"sync"
+	"time"
 )
 
 type Evento struct {
@@ -23,9 +24,18 @@ func (c *Counter) Incrementar() {
 
 func worker(ch chan Evento, wg *sync.WaitGroup, c *Counter) {
 	defer wg.Done()
-	for eventos := range ch {
-		c.Incrementar()
-		fmt.Printf("Nome: %d %s %s \n", c.contador, eventos.Nome, eventos.Acao)
+	for {
+		select {
+		case eventos, ok := <-ch:
+			if !ok {
+				return
+			}
+			c.Incrementar()
+			fmt.Printf("Nome: %d %s %s \n", c.contador, eventos.Nome, eventos.Acao)
+		case <-time.After(1 * time.Second):
+			fmt.Println("timeout!")
+			return
+		}
 	}
 }
 
@@ -38,6 +48,7 @@ func main() {
 		{Nome: "eu", Acao: "entrei"},
 	}
 	ch := make(chan Evento)
+
 	var wg sync.WaitGroup
 	numWorkers := 3
 	wg.Add(numWorkers)
